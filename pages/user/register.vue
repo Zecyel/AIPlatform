@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useNuxtApp } from '#app'
-import { reactive, ref } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 // 定义表单字段

@@ -1,9 +1,9 @@
-export const useUserStore = defineStore("user", () => {
+export const useUserStore = defineStore('user', () => {
   //   const nickname = ref('')
-  const username = ref("")
-  const studentId = ref("")
-  const role = ref("")
-  const _class = ref("")
+  const username = ref('')
+  const studentId = ref('')
+  const role = ref('')
+  const _class = ref('')
   const points = ref(0)
   const logined = ref(false)
 
@@ -21,10 +21,10 @@ export const useUserStore = defineStore("user", () => {
   }
 
   function logout() {
-    username.value = ""
-    studentId.value = ""
-    role.value = ""
-    _class.value = ""
+    username.value = ''
+    studentId.value = ''
+    role.value = ''
+    _class.value = ''
     points.value = 0
     logined.value = false
   }
@@ -39,6 +39,6 @@ export const useUserStore = defineStore("user", () => {
     // actions
     isLogin,
     login,
-    logout
+    logout,
   }
 })

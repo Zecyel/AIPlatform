@@ -1,7 +1,7 @@
-import z from "zod";
-import { User, UserZod } from "../models/User";
-import { publicProcedure, router } from "../trpc/trpc";
-import { generateToken } from "../utils/auth";
+import z from 'zod'
+import { User, UserZod } from '../models/User'
+import { publicProcedure, router } from '../trpc/trpc'
+import { generateToken } from '../utils/auth'
 
 export const UserRoute = router({
   login: publicProcedure
@@ -17,30 +17,30 @@ export const UserRoute = router({
       }),
     )
     .mutation(async ({ input: { studentId, password }, ctx }) => {
-      const user = await User.findOne({ studentId }).exec();
+      const user = await User.findOne({ studentId }).exec()
 
       if (!user) {
-        throw new Error("学号或密码错误");
+        throw new Error('学号或密码错误')
       }
-      const isMatch = await user.matchPassword(password);
+      const isMatch = await user.matchPassword(password)
       if (!isMatch) {
-        throw new Error("学号或密码错误");
+        throw new Error('学号或密码错误')
       }
 
-      const token = generateToken(user);
+      const token = generateToken(user)
 
       // 设置 HTTP-Only Cookie
       ctx.res.setHeader(
-        "Set-Cookie",
+        'Set-Cookie',
         `auth-token=${token}; HttpOnly; Path=/; Max-Age=3600; Secure; SameSite=Strict`,
-      );
+      )
 
       // 返回用户信息，不包括密码
       return {
         username: user.username,
         role: user.role,
         points: user.points,
-      };
+      }
     }),
   register: publicProcedure
     .input(UserZod)
@@ -50,12 +50,12 @@ export const UserRoute = router({
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      const { username, password, role } = input;
+      const { username, password, role } = input
 
       // 检查用户名是否已存在
-      const existingUser = await User.findOne({ username }).exec();
+      const existingUser = await User.findOne({ username }).exec()
       if (existingUser) {
-        throw new Error("用户名已存在");
+        throw new Error('用户名已存在')
       }
 
       // 创建新用户
@@ -63,23 +63,23 @@ export const UserRoute = router({
         username,
         password,
         role,
-      });
+      })
 
-      await user.save();
+      await user.save()
 
-      const token = generateToken(user);
+      const token = generateToken(user)
 
       // 设置 HTTP-Only Cookie
       ctx.res.setHeader(
-        "Set-Cookie",
+        'Set-Cookie',
         `auth-token=${token}; HttpOnly; Path=/; Max-Age=3600; Secure; SameSite=Strict`,
-      );
+      )
 
       // 返回用户信息，不包括密码
       return {
         username: user.username,
         role: user.role,
         points: user.points,
-      };
+      }
     }),
-});
+})
