@@ -36,4 +36,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.actor }}/ai:latest
+          tags: ghcr.io/zecyel/ai:latest
