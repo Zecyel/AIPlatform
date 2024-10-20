@@ -2,10 +2,10 @@
 // 定义表单字段
 const fields = [
   {
-    name: 'studentId',
+    name: 'username',
     type: 'text',
-    label: '学号',
-    placeholder: '请输入您的学号',
+    label: '用户名',
+    placeholder: '请输入您的用户名',
     required: true,
   },
   {
@@ -20,8 +20,8 @@ const fields = [
 // 定义验证函数
 function validate(state: any) {
   const errors = []
-  if (!state.studentId) {
-    errors.push({ path: 'studentId', message: '学号为必填项' })
+  if (!state.username) {
+    errors.push({ path: 'username', message: '用户名为必填项' })
   }
   if (!state.password) {
     errors.push({ path: 'password', message: '密码为必填项' })
@@ -48,7 +48,7 @@ async function onSubmit(data: any) {
 
   try {
     const user = await $client.login.mutate({
-      studentId: data.studentId,
+      username: data.username,
       password: data.password,
     })
     const userStore = useUserStore()
