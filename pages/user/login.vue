@@ -73,7 +73,7 @@ async function onSubmit(data: any) {
         @submit="onSubmit"
       >
         <template #description>
-          还没有账号？ <NuxtLink to="/register" class="text-primary font-medium">
+          还没有账号？ <NuxtLink to="/user/register" class="text-primary font-medium">
             注册
           </NuxtLink>。
         </template>
@@ -83,7 +83,6 @@ async function onSubmit(data: any) {
             忘记密码？
           </NuxtLink>
         </template>
-
         <template #validation>
           <UAlert
             v-if="errorMessage" color="red" icon="i-heroicons-information-circle-20-solid"
