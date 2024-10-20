@@ -2,7 +2,6 @@ const mapper = {
   MONGODB_URI: '$MONGODB_URI',
   MONGO_DB: '$MONGO_DB',
   JWT_SECRET: '$JWT_SECRET',
-  TEST_ENV_VARIANT: '$TEST_ENV_VARIANT',
 }
 
 // for all mapper.keys, if the value starts with $, replace it with process.env.[the key]

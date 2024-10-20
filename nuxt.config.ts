@@ -24,7 +24,6 @@ export default defineNuxtConfig({
   runtimeConfig: {
     private: {
       JWT: env.JWT_SECRET,
-      TEST_ENV_VARIANT: env.TEST_ENV_VARIANT,
     },
   },
   ssr: true,
