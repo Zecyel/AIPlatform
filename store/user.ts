@@ -26,6 +26,10 @@ export const useUserStore = defineStore('user', () => {
     logined.value = false
   }
 
+  function isAdmin() {
+    return role.value === 'admin'
+  }
+
   return {
     // fields
     username,
@@ -36,5 +40,6 @@ export const useUserStore = defineStore('user', () => {
     isLogin,
     login,
     logout,
+    isAdmin,
   }
 })
