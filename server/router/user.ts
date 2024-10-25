@@ -20,11 +20,11 @@ export const UserRoute = router({
       const user = await User.findOne({ username }).exec()
 
       if (!user) {
-        throw new Error('学号或密码错误')
+        throw new Error('用户名或密码错误')
       }
       const isMatch = await user.matchPassword(password)
       if (!isMatch) {
-        throw new Error('学号或密码错误')
+        throw new Error('用户名或密码错误')
       }
 
       const token = generateToken(user)
