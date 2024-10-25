@@ -5,17 +5,13 @@ import { generateToken } from '../utils/auth'
 
 export const UserRoute = router({
   login: publicProcedure
-    .input(
-      z.object({
-        username: z.string(),
-        password: z.string(),
-      }),
-    )
-    .output(
-      UserZod.omit({
-        password: true,
-      }),
-    )
+    .input(z.object({
+      username: z.string(),
+      password: z.string(),
+    }))
+    .output(UserZod.omit({
+      password: true,
+    }))
     .mutation(async ({ input: { username, password }, ctx }) => {
       const user = await User.findOne({ username }).exec()
 
@@ -44,11 +40,9 @@ export const UserRoute = router({
     }),
   register: publicProcedure
     .input(UserZod)
-    .output(
-      UserZod.omit({
-        password: true,
-      }),
-    )
+    .output(UserZod.omit({
+      password: true,
+    }))
     .mutation(async ({ input, ctx }) => {
       const { username, password } = input
 

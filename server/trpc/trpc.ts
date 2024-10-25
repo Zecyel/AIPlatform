@@ -26,3 +26,16 @@ export const isAuthenticated = t.middleware(({ ctx, next }) => {
 })
 
 export const protectedProcedure = publicProcedure.use(isAuthenticated)
+
+export const isAdmin = t.middleware(({ ctx, next }) => {
+  if (ctx.user?.role !== 'admin') {
+    throw new Error('无权限，请使用管理员账号登录')
+  }
+  return next({
+    ctx: {
+      user: ctx.user,
+    },
+  })
+})
+
+export const adminProcedure = publicProcedure.use(isAdmin)
