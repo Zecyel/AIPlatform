@@ -1,6 +1,7 @@
+import type { IUser } from '../models/User'
 import z from 'zod'
 import { User, UserZod } from '../models/User'
-import { publicProcedure, router } from '../trpc/trpc'
+import { adminProcedure, protectedProcedure, publicProcedure, router } from '../trpc/trpc'
 import { generateToken } from '../utils/auth'
 
 export const UserRoute = router({
@@ -75,5 +76,28 @@ export const UserRoute = router({
         role: user.role,
         points: user.points,
       }
+    }),
+  recharge: adminProcedure
+    .input(z.object({
+      username: z.string(),
+      amount: z.number().min(0),
+    }))
+    .mutation(async ({ input }) => {
+      const user = await User.findOne({ username: input.username }).exec()
+      if (!user) {
+        throw new Error('用户不存在')
+      }
+      user.points += input.amount
+      await user.save()
+      return {
+        success: true,
+        new_amount: user.points,
+      }
+    }),
+  getInfo: protectedProcedure
+    .input(z.object({}))
+    .output(UserZod)
+    .query(async ({ ctx }) => {
+      return ctx.user as IUser
     }),
 })
