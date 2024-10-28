@@ -13,6 +13,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
     '@nuxt/eslint',
+    '@nuxtjs/mdc',
   ],
   mongoose: {
     uri: env.MONGODB_URI,
