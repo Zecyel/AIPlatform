@@ -23,27 +23,27 @@ const links = computed<HeaderLink[]>(() => {
   }
 
   const default_links = [{
-    label: '文件共享',
-    icon: 'i-material-symbols-cloud-download-outline-rounded',
-    to: '/file',
-    active: route.path.startsWith('/file'),
+    label: '个人中心',
+    icon: 'i-material-symbols-home',
+    to: '/user/me',
+    active: route.path.startsWith('/user/me'),
   }, {
-    label: '投票',
+    label: 'AI 对话',
     icon: 'i-material-symbols-how-to-vote-outline-rounded',
-    to: '/vote',
+    to: '/ai/chat',
     active: route.path.startsWith('/vote'),
   }, {
-    label: 'AI小助手',
-    icon: 'i-mdi-robot-outline',
-    to: '/ai',
-    active: route.path.startsWith('/ai'),
+    label: 'AI 绘图',
+    icon: 'i-material-symbols-logout-rounded',
+    to: '/ai/paint',
+    active: route.path.startsWith('/logout'),
   }]
 
   const admin_links = [{
     label: '管理后台',
     icon: 'i-material-symbols-settings-outline-rounded',
-    to: '/manager',
-    active: route.path.startsWith('/manager'),
+    to: '/manage',
+    active: route.path.startsWith('/manage'),
   }]
 
   if (user.isAdmin()) {
