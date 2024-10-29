@@ -29,7 +29,7 @@ export const UserRoute = router({
       // 设置 HTTP-Only Cookie
       ctx.res.setHeader(
         'Set-Cookie',
-        `auth-token=${token}; HttpOnly; Path=/; Max-Age=3600; Secure; SameSite=Strict`,
+        `auth-token=${token}; HttpOnly; Path=/; Max-Age=3600; SameSite=Strict`,
       )
 
       // 返回用户信息，不包括密码
@@ -67,7 +67,7 @@ export const UserRoute = router({
       // 设置 HTTP-Only Cookie
       ctx.res.setHeader(
         'Set-Cookie',
-        `auth-token=${token}`,
+        `auth-token=${token}; HttpOnly; Path=/; Max-Age=3600; SameSite=Strict`,
       )
 
       // 返回用户信息，不包括密码
