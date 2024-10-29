@@ -101,10 +101,10 @@ function retryMessage(index: number) {
 
       <div class="flex">
         <!-- 多行输入框 -->
-        <textarea
+        <UTextarea
           v-model="userInput"
           placeholder="请输入您的问题..."
-          class="flex-1 mr-2 border border-gray-300 rounded px-2 py-1 resize-none h-24"
+          class="flex-1 mr-2 rounded resize-none"
           @keyup.ctrl.enter="sendMessage"
         />
         <UButton color="primary" @click="sendMessage">
