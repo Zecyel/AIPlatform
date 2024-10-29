@@ -57,6 +57,25 @@ export const ModelRoute = router({
 
       return { success: true, model: updatedModel.name }
     }),
+  chat: publicProcedure
+    .input(z.object({
+      dialog: z.object({
+        type: z.enum(['user', 'ai', 'error']),
+        content: z.string(),
+      }).array(),
+      model: z.string().min(1),
+    }))
+    .output(z.object({
+      type: z.enum(['ai', 'error']),
+      content: z.string(),
+    }))
+    .mutation(async ({ input }) => {
+      console.log(input)
+      return {
+        type: 'ai',
+        content: 'Hello, I am an AI model',
+      }
+    }),
 })
 
 export default ModelRoute
