@@ -12,8 +12,22 @@ const { $client } = useNuxtApp()
 const toast = useToast()
 
 // 模型列表
-const models = ['gpt-4-32k', 'o1-mini', 'o1-preview']
+const models: string[] = []
 const selectedModel = ref('o1-mini') // 默认选择
+
+onMounted(async () => {
+  try {
+    const all_model = await $client.allModels.query()
+    models.push(...all_model)
+  }
+  catch (err: any) {
+    toast.add({
+      title: '获取模型列表错误',
+      description: err.message,
+    },
+    )
+  }
+})
 
 // 发送聊天请求
 async function sendChatMutation() {
@@ -67,7 +81,11 @@ function retryMessage(index: number) {
           <h2 class="text-xl font-semibold">
             Chat with AI
           </h2>
-          <USelectMenu v-model="selectedModel" :options="models" />
+          <USelectMenu
+            v-model="selectedModel"
+            style="min-width: 50px;"
+            :options="models"
+          />
         </div>
       </template>
 

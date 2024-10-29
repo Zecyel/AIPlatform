@@ -6,8 +6,10 @@ import { adminProcedure, protectedProcedure, publicProcedure, router } from '../
 // Define the TRPC router for model operations
 export const ModelRoute = router({
   // 1. Query all model names
-  getModels: publicProcedure.query(async () => {
-    const models = await Model.find({}, 'name').exec()
+  allModels: publicProcedure.query(async () => {
+    const models = await Model.find({
+      usage: 'dialog',
+    }, 'name').exec()
     return models.map(model => model.name)
   }),
   addModel: adminProcedure
