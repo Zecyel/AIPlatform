@@ -1,6 +1,7 @@
+import OpenAI from 'openai'
 import { z } from 'zod'
 import { Model, ModelZod } from '../models/Model'
-import { adminProcedure, publicProcedure, router } from '../trpc/trpc'
+import { adminProcedure, protectedProcedure, publicProcedure, router } from '../trpc/trpc'
 
 // Define the TRPC router for model operations
 export const ModelRoute = router({
@@ -57,7 +58,7 @@ export const ModelRoute = router({
 
       return { success: true, model: updatedModel.name }
     }),
-  chat: publicProcedure
+  chat: protectedProcedure
     .input(z.object({
       dialog: z.object({
         type: z.enum(['user', 'ai', 'error']),
@@ -69,11 +70,53 @@ export const ModelRoute = router({
       type: z.enum(['ai', 'error']),
       content: z.string(),
     }))
-    .mutation(async ({ input }) => {
-      console.log(input)
-      return {
-        type: 'ai',
-        content: 'Hello, I am an AI model',
+    .mutation(async ({ ctx, input }) => {
+      if (input.dialog.filter(message => message.type === 'error').length > 0) {
+        throw new Error('在对话上下文中存在错误，请修复错误后重试')
+      }
+      if (ctx.user!.points <= 0) {
+        throw new Error('您的积分不足，请充值后重试')
+      }
+      const model = await Model.findOne({ name: input.model }).exec()
+      if (!model) {
+        throw new Error(`未能识别的模型 ${input.model}`)
+      }
+      const token = model.token
+
+      try {
+        const client = new OpenAI({
+          apiKey: token,
+          baseURL: 'https://xiaoai.plus/v1',
+        })
+
+        const message = input.dialog.map(message => ({
+          role: message.type === 'user' ? 'user' : 'assistant',
+          content: message.content,
+        }))
+        const response = await client.chat.completions.create({
+          messages: message as any[],
+          model: model.name,
+        })
+
+        // console.log(response)
+
+        const input_token = response.usage?.prompt_tokens
+        const output_token = response.usage?.completion_tokens
+        // const total_token = response.usage?.total_tokens
+
+        // console.log(`input_token: ${input_token}, output_token: ${output_token}, total_token: ${total_token}`)
+
+        ctx.user!.points -= model.calculatePrice(input_token, output_token)
+        await ctx.user!.save()
+
+        return {
+          type: 'ai',
+          content: response.choices[0].message.content!,
+        }
+      }
+      catch (err: any) {
+        // console.log(err)
+        throw new Error(err.message)
       }
     }),
 })

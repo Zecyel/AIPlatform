@@ -15,7 +15,7 @@ async function sendChatMutation() {
   try {
     const resp = await $client.chat.mutate({
       dialog: conversation,
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4-32k',
     })
 
     conversation.push(resp)
@@ -49,24 +49,14 @@ function deleteMessage(index: number) {
 
 // 重新提问
 function retryMessage(index: number) {
-  // 获取当前上下文直到指定索引
-  const context = conversation
-    .slice(0, index + 1)
-    // .filter(msg => msg.type === 'user')
-    .map(msg => msg.content)
-
-  // const lastMessage = conversation[index].content
-
-  // 重新发送请求
-  conversation.splice(index + 1) // 删除后续的 AI 或错误消息
-
+  conversation.splice(index + 1)
   sendChatMutation()
 }
 </script>
 
 <template>
-  <div class="flex items-center justify-center min-h-screen">
-    <UCard class="max-w-sm w-full mx-auto my-2 sm:my-4 md:my-8 p-6 rounded-lg shadow-md">
+  <div class="flex items-center justify-center min-h-screen px-4">
+    <UCard class="w-full mx-auto my-2 sm:m-4 md:m-8 p-6 rounded-lg shadow-md max-w-full">
       <template #header>
         <h2 class="text-xl font-semibold">
           Chat with AI
@@ -75,26 +65,26 @@ function retryMessage(index: number) {
 
       <div class="overflow-y-auto max-h-[60vh] mb-4">
         <div v-for="(message, index) in conversation" :key="index" class="mb-4">
-          <div v-if="message.type === 'user'" class="text-right">
+          <div v-if="message.type === 'user'" class="text-right border-2 border-blue-300 p-2 rounded">
             <UChip color="blue">
               {{ message.content }}
             </UChip>
           </div>
-          <div v-else-if="message.type === 'ai'" class="mt-2">
+          <div v-else-if="message.type === 'ai'" class="mt-2 border-2 border-green-300 p-4 rounded">
             <MDC :value="message.content" />
           </div>
-          <div v-else-if="message.type === 'error'" class="mt-2 border border-red-500 p-2 rounded">
+          <div v-else-if="message.type === 'error'" class="mt-2 border-2 border-red-500 p-2 rounded">
             <p class="text-red-500">
               {{ message.content }}
             </p>
           </div>
 
           <!-- 操作按钮 -->
-          <div v-if="message.type === 'user'" class="flex space-x-2 mt-1">
-            <UButton size="sm" color="red" @click="deleteMessage(index)">
+          <div v-if="message.type === 'user'" class="flex justify-end space-x-2 mt-2">
+            <UButton size="sm" class="text-gray-700 bg-transparent hover:bg-gray-100" @click="deleteMessage(index)">
               删除
             </UButton>
-            <UButton size="sm" color="yellow" @click="retryMessage(index)">
+            <UButton size="sm" class="text-gray-700 bg-transparent hover:bg-gray-100" @click="retryMessage(index)">
               重新提问
             </UButton>
           </div>
@@ -117,5 +107,12 @@ function retryMessage(index: number) {
 </template>
 
 <style scoped>
-/* 可选：根据需要添加样式 */
+/* 可选：根据需要添加额外的样式 */
+
+/* 确保UCard在小屏幕设备上有适当的内边距 */
+@media (max-width: 640px) {
+  .UCard {
+    padding: 1rem;
+  }
+}
 </style>

@@ -31,6 +31,7 @@
     "lint-staged": "^15.2.10",
     "nuxt": "^3.13.0",
     "nuxt-mongoose": "^1.0.6",
+    "openai": "^4.68.4",
     "pinia": "^2.2.4",
     "simple-git-hooks": "^2.11.1",
     "tailwindcss": "^3.4.13",
