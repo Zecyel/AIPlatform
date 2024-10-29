@@ -95,7 +95,6 @@ export const UserRoute = router({
       }
     }),
   getInfo: protectedProcedure
-    .input(z.object({}))
     .output(UserZod)
     .query(async ({ ctx }) => {
       return ctx.user as IUser

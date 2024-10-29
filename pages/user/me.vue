@@ -5,7 +5,7 @@ onMounted(async () => {
   const { $client } = useNuxtApp()
   const toast = useToast()
   try {
-    const user = await $client.getInfo.query({})
+    const user = await $client.getInfo.query()
     points.value = user.points
   }
   catch (err: any) {
