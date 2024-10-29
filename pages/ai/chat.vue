@@ -11,11 +11,16 @@ const conversation = reactive<Message[]>([])
 const { $client } = useNuxtApp()
 const toast = useToast()
 
+// 模型列表
+const models = ['gpt-4-32k', 'o1-mini', 'o1-preview']
+const selectedModel = ref('o1-mini') // 默认选择
+
+// 发送聊天请求
 async function sendChatMutation() {
   try {
     const resp = await $client.chat.mutate({
       dialog: conversation,
-      model: 'gpt-4-32k',
+      model: selectedModel.value, // 使用选择的模型
     })
 
     conversation.push(resp)
@@ -58,9 +63,12 @@ function retryMessage(index: number) {
   <div class="flex items-center justify-center min-h-screen px-4">
     <UCard class="w-full mx-auto my-2 sm:m-4 md:m-8 p-6 rounded-lg shadow-md max-w-full">
       <template #header>
-        <h2 class="text-xl font-semibold">
-          Chat with AI
-        </h2>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <h2 class="text-xl font-semibold">
+            Chat with AI
+          </h2>
+          <USelectMenu v-model="selectedModel" :options="models" />
+        </div>
       </template>
 
       <div class="overflow-y-auto max-h-[60vh] mb-4">
@@ -92,16 +100,20 @@ function retryMessage(index: number) {
       </div>
 
       <div class="flex">
-        <UInput
+        <!-- 多行输入框 -->
+        <textarea
           v-model="userInput"
           placeholder="请输入您的问题..."
-          class="flex-1 mr-2"
-          @keyup.enter="sendMessage"
+          class="flex-1 mr-2 border border-gray-300 rounded px-2 py-1 resize-none h-24"
+          @keyup.ctrl.enter="sendMessage"
         />
         <UButton color="primary" @click="sendMessage">
           发送
         </UButton>
       </div>
+      <p class="text-sm text-gray-500 mt-2">
+        按 <code>Ctrl + Enter</code> 发送消息
+      </p>
     </UCard>
   </div>
 </template>
