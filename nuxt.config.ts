@@ -1,6 +1,3 @@
-import { env } from './server/utils/environment'
-
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
@@ -16,15 +13,15 @@ export default defineNuxtConfig({
     '@nuxtjs/mdc',
   ],
   mongoose: {
-    uri: env.MONGODB_URI,
+    uri: 'mongodb://mongodb:27017/aiplatform?authSource=admin',
     options: {
-      dbName: env.MONGO_DB,
+      dbName: 'aiplatform',
     },
     modelsDir: 'server/models',
   },
   runtimeConfig: {
     private: {
-      JWT: env.JWT_SECRET,
+      jwtSecret: (process.env.JWT_SECRET || 'Hard to Guess String') as string,
     },
   },
   ssr: true,

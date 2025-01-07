@@ -19,12 +19,6 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
-      - name: Create env_file file from Secrets
-        run: |
-          echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> .env
-          echo "MONGO_DB=${{ secrets.MONGO_DB }}" >> .env
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
-
       - name: Inject env_file into Code
         run: python3 injector.py
 
