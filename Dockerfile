@@ -7,12 +7,12 @@ RUN apk add --no-cache build-base clang
 # Set the working directory
 WORKDIR /app
 
-# Install pnpm globally
-RUN npm install -g pnpm
+# Install bun globally
+RUN npm install -g bun
 
 # Copy package files and install dependencies
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --prod --frozen-lockfile
+COPY package.json ./
+RUN bun install --frozen-lockfile
 
 # Copy presiquite source code
 COPY presiquite.cpp ./
@@ -33,7 +33,7 @@ RUN ./presiquite
 COPY . .
 
 # Build your application (adjust the build command as needed)
-RUN pnpm run build
+RUN bun run build
 
 # Stage 2: Production
 FROM node:18-alpine
@@ -41,8 +41,8 @@ FROM node:18-alpine
 # Set the working directory
 WORKDIR /app
 
-# Install pnpm globally
-RUN npm install -g pnpm
+# Install bun globally
+RUN npm install -g bun
 
 # Copy only the necessary files from the builder stage
 COPY --from=builder /app/.output ./.output
@@ -51,4 +51,4 @@ COPY --from=builder /app/.output ./.output
 EXPOSE 3000
 
 # Define the command to run your application
-CMD ["node", ".output/server/index.mjs"]
+CMD ["bun", ".output/server/index.mjs"]

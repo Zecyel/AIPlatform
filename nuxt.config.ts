@@ -13,7 +13,7 @@ export default defineNuxtConfig({
     '@nuxtjs/mdc',
   ],
   mongoose: {
-    uri: 'mongodb://mongodb:27017/aiplatform?authSource=admin',
+    uri: process.env.MONGO_URI,
     options: {
       dbName: 'aiplatform',
     },
